@@ -27,7 +27,8 @@
     "react",
     "@typescript-eslint",
     "react-hooks",
-    "prettier"
+    "prettier",
+    "import"
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
@@ -42,7 +43,8 @@
         "semi": false,
         "singleQuote": true
       }
-    ]
+    ],
+    "import/no-unused-modules": "error"
   },
   "settings": {
     "react": {
