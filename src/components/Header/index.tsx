@@ -39,13 +39,17 @@ const Header = ({ Home }: Props) => {
           }}
         />
       </S.Header>
-      <S.Imagem style={{ backgroundImage: `url(${img})` }}>
-        <div className="overlay"></div>
-        <S.Content className="container">
-          <h2>Italiana</h2>
-          <p>La Dolce Vita Trattoria</p>
-        </S.Content>
-      </S.Imagem>
+      {Home ? (
+        ''
+      ) : (
+        <S.Imagem style={{ backgroundImage: `url(${img})` }}>
+          <div className="overlay"></div>
+          <S.Content className="container">
+            <h2>Italiana</h2>
+            <p>La Dolce Vita Trattoria</p>
+          </S.Content>
+        </S.Imagem>
+      )}
     </>
   )
 }
