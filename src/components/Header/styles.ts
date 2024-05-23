@@ -20,13 +20,13 @@ export const Title = styled.h1`
 `
 
 export const ContainerHeader = styled.div<Props>`
-  max-width: 1366px;
+  max-width: 1024px;
   height: 138px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding-top: 20px;
 
   span {
@@ -35,8 +35,17 @@ export const ContainerHeader = styled.div<Props>`
     color: ${cores.RosaAvermelhado};
   }
 
+  button {
+    font-size: 18px;
+    font-weight: 900;
+    color: ${cores.RosaAvermelhado};
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
   .logoContainer {
-    padding: ${(props) => (props.Home ? '0' : '0 210px 0 300px')};
+    padding: ${(props) => (props.Home ? '0' : '0 193px 0 341')};
   }
 `
 
@@ -69,7 +78,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px;
+  padding: 20px 0;
 
   h2 {
     font-size: 32px;

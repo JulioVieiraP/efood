@@ -17,18 +17,14 @@ const Header = ({ Home }: Props) => {
   return (
     <>
       <S.Header>
-        <S.ContainerHeader Home={Home}>
-          <div>
-            <span>{titleRestaurante}</span>
-          </div>
+        <S.ContainerHeader Home={Home} className="container">
+          <span>{titleRestaurante}</span>
           <div className="logoContainer">
             <Link to="/">
               <img className="logoImage" src={Logo} alt="efood" />
             </Link>
           </div>
-          <div>
-            <span>{titleCarrinho}</span>
-          </div>
+          <button>{titleCarrinho}</button>
         </S.ContainerHeader>
         <S.Title
           dangerouslySetInnerHTML={{
