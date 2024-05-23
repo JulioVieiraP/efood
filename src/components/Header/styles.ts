@@ -3,38 +3,39 @@ import cores from '../../styles/Cores'
 import { Props } from '.'
 
 export const Header = styled.header<Props>`
+  height: 270px;
   background-color: ${cores.Pêssego};
   display: flex;
-  flex-direction: ${(props) => (props.Home ? 'column' : 'row')};
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
 `
 
 export const Title = styled.h1`
-  margin-top: 138px;
-  margin-bottom: 40px;
+  margin: 50px 0 30px;
+  font-size: 36px;
+  font-weight: 900;
   color: ${cores.RosaAvermelhado};
 `
 
 export const ContainerHeader = styled.div<Props>`
   max-width: 1366px;
+  height: 138px;
   width: 100%;
   margin: 0 auto;
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin: 64px 0;
+  padding-top: 20px;
+
+  span {
+    font-size: 18px;
+    font-weight: 900;
+    color: ${cores.RosaAvermelhado};
+  }
 
   .logoContainer {
-    margin: ${(props) => (props.Home ? '0' : '30px 210px 0 300px')};
+    padding: ${(props) => (props.Home ? '0' : '0 210px 0 300px')};
   }
-`
-
-export const RestaurantName = styled.span`
-  color: ${cores.RosaAvermelhado};
-`
-
-export const CartItems = styled.span`
-  color: ${cores.RosaAvermelhado};
 `

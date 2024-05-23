@@ -48,6 +48,7 @@ export const Imagem = styled.img<Omit<Props, 'Efoods'>>`
 
 export const Title = styled.h3`
   font-size: 18px;
+  font-weight: 700;
   font-weight: bold;
 `
 

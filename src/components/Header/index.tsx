@@ -17,7 +17,7 @@ const Header = ({ Home }: Props) => {
     <S.Header>
       <S.ContainerHeader Home={Home}>
         <div>
-          <S.RestaurantName>{titleRestaurante}</S.RestaurantName>
+          <span>{titleRestaurante}</span>
         </div>
         <div className="logoContainer">
           <Link to="/">
@@ -25,7 +25,7 @@ const Header = ({ Home }: Props) => {
           </Link>
         </div>
         <div>
-          <S.CartItems>{titleCarrinho}</S.CartItems>
+          <span>{titleCarrinho}</span>
         </div>
       </S.ContainerHeader>
       <S.Title
