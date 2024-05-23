@@ -3,8 +3,8 @@ import { Props } from '.'
 import cores from '../../styles/Cores'
 
 export const TagContainer = styled.div<Props>`
-  background-color: ${cores.corPrincipal};
-  color: ${cores.corSecundaria};
+  background-color: ${cores.RosaAvermelhado};
+  color: ${cores.brancoPuro};
   text-decoration: none;
   font-size: 14px;
   margin-top: 16px;

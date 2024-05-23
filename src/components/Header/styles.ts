@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import cores from '../../styles/Cores'
 
 export const Header = styled.header`
-  background-color: ${cores.corSecundaria};
+  background-color: ${cores.Pêssego};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,5 +24,5 @@ export const Header = styled.header`
 export const Title = styled.h1`
   margin-top: 138px;
   margin-bottom: 40px;
-  color: ${cores.corPrincipal};
+  color: ${cores.RosaAvermelhado};
 `

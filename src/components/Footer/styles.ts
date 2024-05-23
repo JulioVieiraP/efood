@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import cores from '../../styles/Cores'
 
 export const Footer = styled.footer`
-  background-color: ${cores.corSecundaria};
+  background-color: ${cores.Pêssego};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,7 +23,7 @@ export const ListaLogo = styled.ul`
   }
 `
 export const Descricao = styled.p`
-  color: ${cores.corPrincipal};
+  color: ${cores.RosaAvermelhado};
   text-align: center;
   font-weight: 400;
   font-size: 10px;

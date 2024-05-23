@@ -1,8 +1,8 @@
 const cores = {
-  corSecundaria: '#FFEBD9',
-  corPrincipal: '#E66767',
-  corDeFundo: '#FFF8F2',
-  branco: '#fff'
+  Pêssego: '#FFEBD9',
+  RosaAvermelhado: '#E66767',
+  fundoPêssego: '#FFF8F2',
+  brancoPuro: '#fff'
 }
 
 export default cores

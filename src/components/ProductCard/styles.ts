@@ -1,17 +1,16 @@
 import styled from 'styled-components'
 import cores from '../../styles/Cores'
-import { TagContainer } from '../Tag/styles'
 
 export const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px 80px;
-  color: ${cores.corPrincipal};
+  color: ${cores.RosaAvermelhado};
 `
 
 export const Card = styled.div`
   background-color: transparent;
-  border: solid 1px ${cores.corPrincipal};
+  border: solid 1px ${cores.RosaAvermelhado};
   position: relative;
 
   div {

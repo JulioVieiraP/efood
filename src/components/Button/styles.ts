@@ -8,8 +8,8 @@ type Props = {
 
 export const ButtonContainer = styled.button<Props>`
   width: ${(props) => (props.width ? '304px' : 'auto')};
-  background-color: ${cores.corPrincipal};
-  color: ${cores.corSecundaria};
+  background-color: ${cores.RosaAvermelhado};
+  color: ${cores.brancoPuro};
   font-size: 14px;
   font-weight: 700;
   line-height: 16px;
@@ -18,8 +18,8 @@ export const ButtonContainer = styled.button<Props>`
 `
 export const ButtonLink = styled(Link)<Props>`
   width: ${(props) => (props.width ? '304px' : 'auto')};
-  background-color: ${cores.corPrincipal};
-  color: ${cores.corSecundaria};
+  background-color: ${cores.RosaAvermelhado};
+  color: ${cores.brancoPuro};
   font-size: 14px;
   font-weight: 700;
   line-height: 16px;
