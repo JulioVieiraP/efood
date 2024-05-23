@@ -8,6 +8,7 @@ export const Footer = styled.footer`
   align-items: center;
   flex-direction: column;
   padding: 40px 0;
+  margin-top: 120px;
 
   img {
     padding-bottom: 32px;
