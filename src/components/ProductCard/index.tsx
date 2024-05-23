@@ -3,7 +3,7 @@ import * as S from './styles'
 import Tag from '../Tag'
 import Star from '../../assets/images/star_favorite-[#1499].png'
 
-type Props = {
+export type Props = {
   Efoods: {
     id: number
     title: string
@@ -12,32 +12,48 @@ type Props = {
     nota: string
     image: string
   }[]
+  Card2?: boolean
+  TextoBotao?: string
 }
 
-const ProductCard = ({ Efoods }: Props) => {
+const ProductCard = ({ Efoods, Card2 = false }: Props) => {
   return (
     <>
-      <S.Main>
+      <S.Main Card2={Card2}>
         {Efoods.map((item) => (
-          <S.Card key={item.id}>
-            <S.Categories>
-              {item.infos.map((info) => (
-                <Tag key={info}>{info}</Tag>
-              ))}
-            </S.Categories>
-            <S.Imagem src={item.image} />
+          <S.Card Card2={Card2} key={item.id}>
+            {!Card2 && (
+              <S.Categories Card2={Card2}>
+                {item.infos.map((info: string) => (
+                  <Tag key={info}>{info}</Tag>
+                ))}
+              </S.Categories>
+            )}
+            <S.Imagem src={item.image} Card2={Card2} />
             <div>
               <S.Title>{item.title}</S.Title>
-              <S.Popularidade>
-                <h3>{item.nota}</h3>
-                <img src={Star} alt="Avaliar" />
-              </S.Popularidade>
+              {!Card2 && (
+                <S.Popularidade>
+                  <h3>{item.nota}</h3>
+                  <img src={Star} alt="Avaliar" />
+                </S.Popularidade>
+              )}
             </div>
-            <S.Description>{item.description}</S.Description>
+            <S.Description Card2={Card2}>{item.description}</S.Description>
             <div>
-              <Button type="link" title="Click aqui" to="/Perfil">
-                Saiba mais
-              </Button>
+              {Card2 ? (
+                <Button
+                  type="button"
+                  title="Click aqui"
+                  onClick={() => alert('clicou')}
+                >
+                  Adicionar ao carrinho
+                </Button>
+              ) : (
+                <Button type="link" title="Click aqui" to="/Perfil">
+                  Saiba mais
+                </Button>
+              )}
             </div>
           </S.Card>
         ))}

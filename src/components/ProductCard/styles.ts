@@ -1,15 +1,20 @@
 import styled from 'styled-components'
 import cores from '../../styles/Cores'
+import { Props } from '.'
 
-export const Main = styled.main`
+export const Main = styled.main<Omit<Props, 'Efoods'>>`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px 80px;
-  color: ${cores.RosaAvermelhado};
+  grid-template-columns: ${(props) =>
+    props.Card2 ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)'};
+  gap: ${(props) => (props.Card2 ? '32px' : '40px 80px')};
+  color: ${(props) =>
+    props.Card2 ? `${cores.Pêssego}` : `${cores.RosaAvermelhado}`};
+  margin-top: ${(props) => (props.Card2 ? '56px' : '80px')};
 `
 
-export const Card = styled.div`
-  background-color: transparent;
+export const Card = styled.div<Omit<Props, 'Efoods'>>`
+  background-color: ${(props) =>
+    props.Card2 ? `${cores.RosaAvermelhado}` : 'transparent'};
   border: solid 1px ${cores.RosaAvermelhado};
   position: relative;
 
@@ -19,33 +24,52 @@ export const Card = styled.div`
     align-items: center;
     padding: 8px;
   }
+
+  a,
+  button {
+    border: none;
+    background-color: ${(props) =>
+      props.Card2 ? `${cores.Pêssego}` : `${cores.RosaAvermelhado}`};
+    color: ${(props) =>
+      props.Card2 ? `${cores.RosaAvermelhado}` : `${cores.brancoPuro}`};
+    width: ${(props) => (props.Card2 ? '304px' : '100px')};
+    cursor: pointer;
+  }
 `
-export const Imagem = styled.img`
-  width: 100%;
-  height: 217px;
+
+export const Imagem = styled.img<Omit<Props, 'Efoods'>>`
+  width: ${(props) => (props.Card2 ? '304px' : '475px')};
+  height: ${(props) => (props.Card2 ? '167px' : '217px')};
   object-fit: cover;
+  display: ${(props) => (props.Card2 ? 'block' : 'initial')};
+  margin: ${(props) => (props.Card2 ? '0 auto' : '0')};
+  margin-top: ${(props) => (props.Card2 ? '8px' : '0')};
 `
+
 export const Title = styled.h3`
   font-size: 18px;
   font-weight: bold;
 `
-export const Description = styled.p`
+
+export const Description = styled.p<Omit<Props, 'Efoods'>>`
   font-size: 14px;
-  font-weight: regular;
+  font-weight: 400;
   margin-right: 8px;
   margin-left: 8px;
-  margin-bottom: 16px;
+  margin-bottom: ${(props) => (props.Card2 ? '8px' : '16px')};
+  margin-top: ${(props) => (props.Card2 ? '0px' : '8px')};
 `
+
 export const Popularidade = styled.div`
   h3 {
     font-size: 18px;
     font-weight: bold;
-    margin-top: 8px;
-    margin-right: 8px;
   }
   display: flex;
 `
-export const Categories = styled.div`
+
+export const Categories = styled.div<Omit<Props, 'Efoods'>>`
+  display: ${(props) => (props.Card2 ? 'none' : 'inline')};
   position: absolute;
   top: 0;
   right: 16px;
