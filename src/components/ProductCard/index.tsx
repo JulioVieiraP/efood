@@ -19,7 +19,7 @@ export type Props = {
 const ProductCard = ({ Efoods, Card2 = false }: Props) => {
   return (
     <>
-      <S.Main Card2={Card2}>
+      <S.Main Card2={Card2} className="container">
         {Efoods.map((item) => (
           <S.Card Card2={Card2} key={item.id}>
             {!Card2 && (

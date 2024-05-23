@@ -2,6 +2,7 @@ import ProductCard from '../../components/ProductCard'
 import Efoods from '../../model/Efood'
 import img1 from '../../assets/images/Restaurante1.png'
 import img2 from '../../assets/images/Restaurante2.png'
+import Header from '../../components/Header'
 
 const Perfil = () => {
   const ListeRestaurantes: Efoods[] = [
@@ -63,6 +64,7 @@ const Perfil = () => {
 
   return (
     <>
+      <Header Home={false} />
       <ProductCard Efoods={ListeRestaurantes} Card2={true} />
     </>
   )

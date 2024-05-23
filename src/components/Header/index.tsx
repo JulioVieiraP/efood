@@ -1,17 +1,42 @@
+import { useLocation, Link } from 'react-router-dom'
 import * as S from './styles'
 import Logo from '../../assets/images/logo.svg'
-const Header = () => {
+
+export type Props = {
+  Home?: boolean
+}
+
+const Header = ({ Home }: Props) => {
+  const location = useLocation()
+
+  const titleRestaurante = location.pathname === '/Perfil' ? 'Restaurantes' : ''
+  const titleCarrinho =
+    location.pathname === '/Perfil' ? '0 produto(s) no carrinho' : ''
+
   return (
-    <>
-      <S.Header>
-        <div className="container">
-          <img src={Logo} alt="efood" />
-          <S.Title>
-            Viva experiências gastronômicas <br /> no conforto da sua casa
-          </S.Title>
+    <S.Header>
+      <S.ContainerHeader Home={Home}>
+        <div>
+          <S.RestaurantName>{titleRestaurante}</S.RestaurantName>
         </div>
-      </S.Header>
-    </>
+        <div className="logoContainer">
+          <Link to="/">
+            <img className="logoImage" src={Logo} alt="efood" />
+          </Link>
+        </div>
+        <div>
+          <S.CartItems>{titleCarrinho}</S.CartItems>
+        </div>
+      </S.ContainerHeader>
+      <S.Title
+        dangerouslySetInnerHTML={{
+          __html:
+            location.pathname === '/Perfil'
+              ? ''
+              : 'Viva experiências gastronômicas <br/> no conforto da sua casa'
+        }}
+      />
+    </S.Header>
   )
 }
 

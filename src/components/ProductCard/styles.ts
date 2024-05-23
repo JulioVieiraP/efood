@@ -9,7 +9,7 @@ export const Main = styled.main<Omit<Props, 'Efoods'>>`
   gap: ${(props) => (props.Card2 ? '32px' : '40px 80px')};
   color: ${(props) =>
     props.Card2 ? `${cores.Pêssego}` : `${cores.RosaAvermelhado}`};
-  margin-top: ${(props) => (props.Card2 ? '56px' : '80px')};
+  padding-top: ${(props) => (props.Card2 ? '56px' : '80px')};
 `
 
 export const Card = styled.div<Omit<Props, 'Efoods'>>`
