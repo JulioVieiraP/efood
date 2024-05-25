@@ -2,14 +2,13 @@ import ProductCard from '../../components/ListaRestaurantes'
 import Header from '../../components/Header'
 import { useEffect, useState } from 'react'
 
-export type Cardapio = {
-  capa: string
+export interface Cardapio {
+  foto: string
   preco: number
   id: number
   nome: string
   descricao: string
   porcao: string
-  Categories?: string[]
 }
 
 export type Restaurante = {

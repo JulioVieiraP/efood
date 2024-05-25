@@ -5,7 +5,7 @@ type Props = {
   title: string
   to?: string
   onClick?: () => void
-  children: string
+  children: JSX.Element | string
 }
 
 const Button = ({ type, children, title, to, onClick }: Props) => {

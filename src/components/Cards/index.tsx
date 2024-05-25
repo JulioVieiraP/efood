@@ -1,7 +1,11 @@
+// Card.tsx
 import Button from '../Button'
 import * as S from './styles'
 import Star from '../../assets/images/star_favorite-[#1499].png'
 import Tag from '../Tag'
+import { useState } from 'react'
+import { Cardapio } from '../../pages/Home'
+import Modal from '../Modal'
 
 export type Props = {
   titulo?: string
@@ -12,18 +16,40 @@ export type Props = {
   TextoBotao: 'Saiba mais' | 'Adicionar ao carrinho'
   tipo?: string
   id?: number
+  typeButton?: 'link' | 'button'
+  star?: string
+  preco?: number
+  porcao?: string
 }
 
 const Card = ({
+  titulo,
   descricao,
   img,
-  titulo,
   fundo = true,
   TextoBotao,
   Categories,
   tipo,
-  id
+  id,
+  typeButton,
+  star,
+  preco,
+  porcao
 }: Props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<Cardapio | null>(null)
+  const handleAddToCart = () => {
+    const selectedItem: Cardapio = {
+      foto: img || '',
+      preco: preco || 0,
+      id: id || 0,
+      nome: titulo || '',
+      descricao: descricao || '',
+      porcao: porcao || ''
+    }
+    setSelectedItem(selectedItem)
+    setIsModalOpen(true)
+  }
   return (
     <>
       <S.Card fundo={fundo}>
@@ -41,27 +67,43 @@ const Card = ({
               ))}
           </S.Categories>
         )}
-        <S.Imagem src={img} alt={titulo} fundo={fundo} />
-        <div>
-          <S.Title>{titulo}</S.Title>
-          {fundo && (
-            <S.Popularidade>
-              <h3>4.5</h3>
-              <img src={Star} alt="Avaliar" />
-            </S.Popularidade>
-          )}
-        </div>
-        <S.Description fundo={fundo}>{descricao}</S.Description>
-        <div>
+        <S.Imagem src={img || ''} alt={titulo || ''} fundo={fundo} />
+        <S.Content>
+          <div>
+            <S.Title fundo={fundo}>{titulo}</S.Title>
+            {fundo && (
+              <S.Popularidade>
+                <h3>{star}</h3>
+                <img src={Star} alt="Avaliar" />
+              </S.Popularidade>
+            )}
+          </div>
+          <S.Description fundo={fundo}>{descricao}</S.Description>
+        </S.Content>
+        {typeButton === 'button' ? (
           <Button
-            to={`/Perfil/${id}`}
-            type="link"
+            onClick={handleAddToCart}
+            type="button"
             title="Adicionar ao carrinho"
           >
             {TextoBotao}
           </Button>
-        </div>
+        ) : (
+          <Button to={`/Produtos/${id}`} type="link" title="Saiba mais">
+            {TextoBotao}
+          </Button>
+        )}
       </S.Card>
+      {isModalOpen && selectedItem && (
+        <Modal
+          foto={selectedItem.foto}
+          nome={selectedItem.nome}
+          descricao={selectedItem.descricao}
+          preco={selectedItem.preco}
+          porcao={selectedItem.porcao}
+          onClick={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   )
 }

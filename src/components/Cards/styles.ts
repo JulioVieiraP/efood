@@ -4,7 +4,14 @@ import { Props } from '.'
 
 type CardProps = Omit<
   Props,
-  'titulo' | 'descricao' | 'img' | 'TextoBotao' | 'tipo' | 'Categories' | 'id'
+  | 'titulo'
+  | 'descricao'
+  | 'img'
+  | 'TextoBotao'
+  | 'tipo'
+  | 'Categories'
+  | 'id'
+  | 'star'
 >
 
 export const Card = styled.div<CardProps>`
@@ -13,14 +20,9 @@ export const Card = styled.div<CardProps>`
   background-color: ${(props) =>
     props.fundo ? 'transparent' : `${cores.RosaAvermelhado}`};
   border: solid 1px ${cores.RosaAvermelhado};
-  position: relative;
-
-  div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   a,
   button {
@@ -29,8 +31,21 @@ export const Card = styled.div<CardProps>`
       props.fundo ? `${cores.RosaAvermelhado}` : `${cores.Pêssego}`};
     color: ${(props) =>
       props.fundo ? `${cores.brancoPuro}` : `${cores.RosaAvermelhado}`};
-    width: ${(props) => (props.fundo ? '100px' : '100%')};
+    width: ${(props) => (props.fundo ? '100px' : '304px')};
     cursor: pointer;
+    padding: 8px;
+    margin: 8px;
+  }
+`
+
+export const Content = styled.div`
+  flex: 1;
+  padding: 8px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `
 
@@ -43,17 +58,16 @@ export const Imagem = styled.img<CardProps>`
   margin-top: ${(props) => (props.fundo ? '0' : '8px')};
 `
 
-export const Title = styled.h3`
+export const Title = styled.h3<CardProps>`
   font-size: 18px;
   font-weight: 700;
   font-weight: bold;
+  margin-bottom: ${(props) => (props.fundo ? '0' : '8px')};
 `
 
 export const Description = styled.p<CardProps>`
   font-size: 14px;
   font-weight: 400;
-  margin-right: 8px;
-  margin-left: 8px;
   margin-bottom: ${(props) => (props.fundo ? '16px' : '8px')};
   margin-top: ${(props) => (props.fundo ? '8px' : '0')};
 `
@@ -68,7 +82,4 @@ export const Popularidade = styled.div`
 
 export const Categories = styled.div<CardProps>`
   display: ${(props) => (props.fundo ? 'none' : 'inline')};
-  position: absolute;
-  top: 0;
-  right: 16px;
 `

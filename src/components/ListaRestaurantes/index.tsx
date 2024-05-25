@@ -13,6 +13,7 @@ const ProductCard = ({ Efoods }: Props) => {
       {Efoods &&
         Efoods.map((item) => (
           <Card
+            star={item.avaliacao ? item.avaliacao : ''}
             id={item.id}
             tipo={item.tipo}
             Categories={
@@ -24,6 +25,7 @@ const ProductCard = ({ Efoods }: Props) => {
             titulo={item.titulo}
             img={item.capa}
             fundo={true}
+            typeButton="link"
           />
         ))}
     </S.Main>
