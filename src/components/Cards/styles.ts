@@ -73,9 +73,17 @@ export const Description = styled.p<CardProps>`
 `
 
 export const Popularidade = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   h3 {
     font-size: 18px;
     font-weight: bold;
+  }
+  img {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
   }
   display: flex;
 `
