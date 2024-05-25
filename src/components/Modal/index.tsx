@@ -3,6 +3,7 @@ import { formataPreco } from '../../pages/Produtos'
 import Button from '../Button'
 import * as S from './styles'
 import close from '../../assets/images/close 1.png'
+import { MouseEvent } from 'react'
 
 export type Props = {
   foto?: string
@@ -14,9 +15,15 @@ export type Props = {
 }
 
 const Modal = ({ foto, nome, descricao, preco, porcao, onClick }: Props) => {
+  const handleContainerClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClick && onClick()
+    }
+  }
+
   return (
     <>
-      <S.ModalContainer>
+      <S.ModalContainer onClick={handleContainerClick}>
         <S.ModalContent>
           <S.FecharModal onClick={onClick}>
             <img src={close} alt="Fechar" />
@@ -27,9 +34,11 @@ const Modal = ({ foto, nome, descricao, preco, porcao, onClick }: Props) => {
               <h2>{nome}</h2>
               <p>{descricao}</p>
               <span>Serve: {porcao}</span>
-              <Button type="button" title="Adicione ao carrinho">
-                <>{`Adicionar ao carrinho - ${formataPreco(preco)}`}</>
-              </Button>
+              {preco && ( // Verifica se preco existe
+                <Button type="button" title="Adicione ao carrinho">
+                  <>Adicionar ao carrinho - {formataPreco(preco)}</>
+                </Button>
+              )}
             </S.Content>
           </div>
         </S.ModalContent>
