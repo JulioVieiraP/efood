@@ -1,7 +1,8 @@
+import * as React from 'react'
 import * as S from './styles'
 
 export type Props = {
-  children: string
+  children: React.ReactNode
 }
 
 const Tag = ({ children }: Props) => <S.TagContainer>{children}</S.TagContainer>

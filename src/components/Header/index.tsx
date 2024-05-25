@@ -1,14 +1,36 @@
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, useParams } from 'react-router-dom'
 import * as S from './styles'
 import Logo from '../../assets/images/logo.svg'
-import img from '../../assets/images/Restaurante2.png'
+import { useEffect, useState } from 'react'
+import { Restaurante } from '../../pages/Home'
 
 export type Props = {
   Home?: boolean
 }
 
 const Header = ({ Home }: Props) => {
+  const { id } = useParams()
   const location = useLocation()
+
+  const [Cardapio, setCardapio] = useState<Restaurante>()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCardapio(data)
+        setLoading(false)
+      })
+  }, [id])
+
+  if (loading) {
+    return <h1>Carregando...</h1>
+  }
+
+  if (!Cardapio) {
+    return <h1>Erro ao procurar o item</h1>
+  }
 
   const titleRestaurante = location.pathname === '/Perfil' ? 'Restaurantes' : ''
   const titleCarrinho =
@@ -18,7 +40,9 @@ const Header = ({ Home }: Props) => {
     <>
       <S.Header>
         <S.ContainerHeader Home={Home} className="container">
-          <span>{titleRestaurante}</span>
+          <Link to="/">
+            <span>{titleRestaurante}</span>
+          </Link>
           <div className="logoContainer">
             <Link to="/">
               <img className="logoImage" src={Logo} alt="efood" />
@@ -38,11 +62,11 @@ const Header = ({ Home }: Props) => {
       {Home ? (
         ''
       ) : (
-        <S.Imagem style={{ backgroundImage: `url(${img})` }}>
+        <S.Imagem style={{ backgroundImage: `url(${Cardapio.capa})` }}>
           <div className="overlay"></div>
           <S.Content className="container">
-            <h2>Italiana</h2>
-            <p>La Dolce Vita Trattoria</p>
+            <h2>{Cardapio.tipo}</h2>
+            <p>{Cardapio.titulo}</p>
           </S.Content>
         </S.Imagem>
       )}

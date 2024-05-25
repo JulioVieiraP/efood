@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home'
-import Perfil from '../pages/Perfil'
+import Produtos from '../pages/Produtos'
 
 const RouterView = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/Perfil" element={<Perfil />} />
+      <Route path="/Produtos/:id" element={<Produtos />} />
     </Routes>
   )
 }
