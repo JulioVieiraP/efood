@@ -36,6 +36,7 @@ export const ModalContent = styled.div`
   }
 
   button {
+    cursor: pointer;
     width: 218px;
     margin-top: 16px;
     border: none;

@@ -23,6 +23,7 @@ const Cart = () => {
     if (items.length > 1) {
       dispatch(remove(id))
     } else {
+      dispatch(remove(id))
       dispatch(close())
     }
   }

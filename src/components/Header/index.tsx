@@ -1,8 +1,9 @@
 import { useLocation, Link, useParams } from 'react-router-dom'
 import * as S from './styles'
 import Logo from '../../assets/images/logo.svg'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { open } from '../../redux/reducers/Cart'
+import { RootReducer } from '../../redux/store'
 
 export type Props = {
   Home?: boolean
@@ -13,11 +14,14 @@ const Header = ({ Home }: Props) => {
   const location = useLocation()
 
   const dispatch = useDispatch()
+  const { items } = useSelector((state: RootReducer) => state.cart)
 
   const titleRestaurante =
     location.pathname === `/Produtos/${id}` ? 'Restaurantes' : ''
   const titleCarrinho =
-    location.pathname === `/Produtos/${id}` ? '0 produto(s) no carrinho' : ''
+    location.pathname === `/Produtos/${id}`
+      ? `${items.length} produto(s) no carrinho`
+      : ''
 
   return (
     <>

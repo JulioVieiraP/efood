@@ -1,11 +1,10 @@
-// Card.tsx
 import Button from '../Button'
 import * as S from './styles'
 import Star from '../../assets/images/star_favorite-[#1499].png'
 import Tag from '../Tag'
-import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { openModal } from '../../redux/reducers/Cart'
 import { Cardapio } from '../../pages/Home'
-import Modal from '../Modal'
 
 export type Props = {
   titulo?: string
@@ -36,8 +35,8 @@ const Card = ({
   preco,
   porcao
 }: Props) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<Cardapio | null>(null)
+  const dispatch = useDispatch()
+
   const handleAddToCart = () => {
     const selectedItem: Cardapio = {
       foto: img || '',
@@ -47,9 +46,9 @@ const Card = ({
       descricao: descricao || '',
       porcao: porcao || ''
     }
-    setSelectedItem(selectedItem)
-    setIsModalOpen(true)
+    dispatch(openModal(selectedItem))
   }
+
   return (
     <>
       <S.Card fundo={fundo}>
@@ -94,16 +93,6 @@ const Card = ({
           </Button>
         )}
       </S.Card>
-      {isModalOpen && selectedItem && (
-        <Modal
-          foto={selectedItem.foto}
-          nome={selectedItem.nome}
-          descricao={selectedItem.descricao}
-          preco={selectedItem.preco}
-          porcao={selectedItem.porcao}
-          onClick={() => setIsModalOpen(false)}
-        />
-      )}
     </>
   )
 }

@@ -3,6 +3,9 @@ import Card from '../Cards'
 import * as S from './styles'
 import { useEffect, useState } from 'react'
 import Banner from '../Banner'
+import Modal from '../Modal'
+import { useSelector } from 'react-redux'
+import { RootReducer } from '../../redux/store'
 
 interface Cardapio {
   foto: string
@@ -17,6 +20,9 @@ const Pratos = () => {
   const { id } = useParams<{ id: string }>()
   const [cardapio, setCardapio] = useState<Cardapio[]>([])
   const [loading, setLoading] = useState(true)
+  const { isOpenModal, selectedItem } = useSelector(
+    (state: RootReducer) => state.cart
+  )
 
   useEffect(() => {
     setLoading(true)
@@ -55,6 +61,17 @@ const Pratos = () => {
           <p>Nenhum dado disponível.</p>
         )}
       </S.Main>
+
+      {isOpenModal && selectedItem && (
+        <Modal
+          id={selectedItem.id}
+          foto={selectedItem.foto}
+          nome={selectedItem.nome}
+          descricao={selectedItem.descricao}
+          preco={selectedItem.preco}
+          porcao={selectedItem.porcao}
+        />
+      )}
     </>
   )
 }
