@@ -1,6 +1,8 @@
 import { useLocation, Link, useParams } from 'react-router-dom'
 import * as S from './styles'
 import Logo from '../../assets/images/logo.svg'
+import { useDispatch } from 'react-redux'
+import { open } from '../../redux/reducers/Cart'
 
 export type Props = {
   Home?: boolean
@@ -9,6 +11,8 @@ export type Props = {
 const Header = ({ Home }: Props) => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
+
+  const dispatch = useDispatch()
 
   const titleRestaurante =
     location.pathname === `/Produtos/${id}` ? 'Restaurantes' : ''
@@ -30,7 +34,7 @@ const Header = ({ Home }: Props) => {
             </Link>
           </div>
           <div>
-            <button>{titleCarrinho}</button>
+            <button onClick={() => dispatch(open())}>{titleCarrinho}</button>
           </div>
         </S.ContainerHeader>
         <S.Title

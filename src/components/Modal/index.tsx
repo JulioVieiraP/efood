@@ -34,7 +34,7 @@ const Modal = ({ foto, nome, descricao, preco, porcao, onClick }: Props) => {
               <h2>{nome}</h2>
               <p>{descricao}</p>
               <span>Serve: {porcao}</span>
-              {preco && ( // Verifica se preco existe
+              {preco && (
                 <Button type="button" title="Adicione ao carrinho">
                   <>Adicionar ao carrinho - {formataPreco(preco)}</>
                 </Button>
