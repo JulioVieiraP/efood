@@ -4,7 +4,7 @@ import * as S from './styles'
 import fecharIcon from '../../assets/images/close 1.png'
 import { MouseEvent } from 'react'
 import { useDispatch } from 'react-redux'
-import { add, closeModal } from '../../redux/reducers/Cart'
+import { add, closeModal, open } from '../../redux/reducers/Cart'
 import { Cardapio } from '../../pages/Home'
 
 export type Props = {
@@ -36,6 +36,7 @@ const Modal = ({ id, foto, nome, descricao, preco, porcao }: Props) => {
     }
     dispatch(add(item))
     dispatch(closeModal())
+    dispatch(open())
   }
 
   return (
