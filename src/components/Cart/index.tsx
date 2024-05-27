@@ -30,18 +30,22 @@ const Cart = () => {
   return (
     <S.CartContainer onClick={closeCart}>
       <S.CartContent>
-        <ul>
-          {items.map((item) => (
-            <S.CartItem key={item.id}>
-              <S.ItemImg src={item.foto} />
-              <S.price>
-                <p>Valor total</p>
-                <span>{formataPreco(item.preco)}</span>
-              </S.price>
-              <S.closeBtn src={lixeira} onClick={() => removeItem(item.id)} />
-            </S.CartItem>
-          ))}
-        </ul>
+        {items.length > 0 ? (
+          <ul>
+            {items.map((item) => (
+              <S.CartItem key={item.id}>
+                <S.ItemImg src={item.foto} />
+                <S.price>
+                  <p>Valor total</p>
+                  <span>{formataPreco(item.preco)}</span>
+                </S.price>
+                <S.closeBtn src={lixeira} onClick={() => removeItem(item.id)} />
+              </S.CartItem>
+            ))}
+          </ul>
+        ) : (
+          <h2>Nenhum item adicionado</h2>
+        )}
         <S.TotalPrice>
           <p>Valor total</p>
           <span>{formataPreco(preçoTotal())}</span>

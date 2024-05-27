@@ -12,6 +12,10 @@ export const CartContainer = styled.div`
   z-index: 2;
   display: flex;
   justify-content: flex-end;
+
+  h2 {
+    color: ${cores.Pêssego};
+  }
 `
 
 export const CartContent = styled.aside`
