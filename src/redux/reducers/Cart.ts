@@ -6,13 +6,17 @@ type CartState = {
   isOpen: boolean
   isOpenModal: boolean
   selectedItem: Cardapio | null
+  isConfirme: boolean
+  isCart: boolean
 }
 
 const initialState: CartState = {
   items: [],
   isOpen: false,
   isOpenModal: false,
-  selectedItem: null
+  isConfirme: false,
+  selectedItem: null,
+  isCart: true
 }
 
 const Cart = createSlice({
@@ -41,10 +45,27 @@ const Cart = createSlice({
     closeModal: (state) => {
       state.isOpenModal = false
       state.selectedItem = null
+    },
+    openCheckout: (state) => {
+      state.isConfirme = true
+      state.isCart = false
+    },
+    openCart: (state) => {
+      state.isCart = true
+      state.items = []
     }
   }
 })
 
-export const { add, remove, open, close, openModal, closeModal } = Cart.actions
+export const {
+  add,
+  remove,
+  open,
+  close,
+  openModal,
+  closeModal,
+  openCheckout,
+  openCart
+} = Cart.actions
 
 export default Cart.reducer

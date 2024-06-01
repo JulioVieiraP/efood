@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 import cartReducer from './reducers/Cart'
+import checkoutReducer from './reducers/Checkout'
 import api from '../services/api'
 
 const store = configureStore({
   reducer: {
     cart: cartReducer,
+    checkout: checkoutReducer,
     [api.reducerPath]: api.reducer
   },
   middleware: (getDefaultMiddleware) =>

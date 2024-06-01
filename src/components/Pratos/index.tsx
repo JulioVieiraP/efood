@@ -6,7 +6,6 @@ import Modal from '../Modal'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '../../redux/store'
 import { usePratosQuery } from '../../services/api'
-import { Restaurante } from '../../pages/Home'
 
 const Pratos = () => {
   const { id } = useParams<{ id: string }>()

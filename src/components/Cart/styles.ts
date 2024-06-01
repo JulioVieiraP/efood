@@ -1,45 +1,5 @@
 import styled from 'styled-components'
 import cores from '../../styles/Cores'
-import { ButtonContainer } from '../Button/styles'
-
-export const CartContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 2;
-  display: flex;
-  justify-content: flex-end;
-
-  h2 {
-    color: ${cores.Pêssego};
-  }
-`
-
-export const CartContent = styled.aside`
-  background-color: ${cores.RosaAvermelhado};
-  color: ${cores.Pêssego};
-  max-width: 380px;
-  width: 100%;
-  height: 100%;
-  padding: 0 8px;
-  z-index: 3;
-
-  ${ButtonContainer} {
-    width: 100%;
-    border: none;
-    background-color: ${cores.Pêssego};
-    color: ${cores.RosaAvermelhado};
-    cursor: pointer;
-  }
-
-  ul {
-    margin-top: 32px;
-    margin-bottom: 40px;
-  }
-`
 
 export const CartItem = styled.li`
   background-color: ${cores.Pêssego};
