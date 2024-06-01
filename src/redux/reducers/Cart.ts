@@ -50,7 +50,6 @@ const Cart = createSlice({
     },
     closeCart: (state) => {
       state.isCart = false
-      state.items = []
     }
   }
 })
