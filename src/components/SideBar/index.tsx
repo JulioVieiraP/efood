@@ -7,9 +7,8 @@ import Checkout from '../Checkout'
 
 const SideBar = () => {
   const dispatch = useDispatch()
-  const { isOpen, isConfirme, isCart } = useSelector(
-    (state: RootReducer) => state.cart
-  )
+  const { isOpen, isCart } = useSelector((state: RootReducer) => state.cart)
+  const { isConfirme } = useSelector((state: RootReducer) => state.checkout)
   const closeCart = () => {
     dispatch(close())
   }

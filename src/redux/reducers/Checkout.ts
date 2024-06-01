@@ -4,18 +4,24 @@ type CheckoutState = {
   isDelivery: boolean
   isPayment: boolean
   orderPlaced: boolean
+  isConfirme: boolean
 }
 
 const initialState: CheckoutState = {
-  isDelivery: true,
+  isDelivery: false,
   isPayment: false,
-  orderPlaced: false
+  orderPlaced: false,
+  isConfirme: false
 }
 
 const checkoutSlice = createSlice({
   name: 'Checkout',
   initialState,
   reducers: {
+    openCheckout: (state) => {
+      state.isConfirme = true
+      state.isDelivery = true
+    },
     setPayment: (state) => {
       state.isDelivery = false
       state.isPayment = true
@@ -25,14 +31,15 @@ const checkoutSlice = createSlice({
       state.isPayment = false
       state.orderPlaced = true
     },
-    closeAll: (state) => {
-      state.isDelivery = false
-      state.isPayment = false
-      state.orderPlaced = false
+    resetCheckout: (state) => {
+      state.isDelivery = initialState.isDelivery
+      state.isPayment = initialState.isPayment
+      state.orderPlaced = initialState.orderPlaced
     }
   }
 })
 
-export const { setPayment, confimeOrder, closeAll } = checkoutSlice.actions
+export const { openCheckout, setPayment, confimeOrder, resetCheckout } =
+  checkoutSlice.actions
 
 export default checkoutSlice.reducer

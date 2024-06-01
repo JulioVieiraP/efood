@@ -14,6 +14,13 @@ export const Checkout = styled.div`
   }
 `
 
+export const DeliveryContainer = styled.div`
+  display: none;
+  &.show {
+    display: block;
+  }
+`
+
 export const InputGroup = styled.div<Props>`
   display: flex;
   flex-direction: column;
@@ -46,6 +53,14 @@ export const RowInput = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 8px 0;
+`
+
+export const PaymentContainer = styled.div`
+  display: none;
+
+  &.show {
+    display: block;
+  }
 `
 
 export const confimeOrder = styled.div`

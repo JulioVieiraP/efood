@@ -1,12 +1,13 @@
+import { useDispatch, useSelector } from 'react-redux'
+import { close, closeCart, remove } from '../../redux/reducers/Cart'
+import { RootReducer } from '../../redux/store'
+import { formataPreco } from '../../pages/Produtos'
 import Button from '../Button'
 import * as S from './styles'
 import lixeira from '../../assets/images/lixeira-de-reciclagem 1.png'
-import { useDispatch, useSelector } from 'react-redux'
-import { close, openCheckout, remove } from '../../redux/reducers/Cart'
-import { RootReducer } from '../../redux/store'
-import { formataPreco } from '../../pages/Produtos'
+import { openCheckout } from '../../redux/reducers/Checkout'
 
-const Cart = () => {
+const Cart: React.FC = () => {
   const dispatch = useDispatch()
   const { items } = useSelector((state: RootReducer) => state.cart)
 
@@ -21,6 +22,11 @@ const Cart = () => {
       dispatch(remove(id))
       dispatch(close())
     }
+  }
+
+  const handleOpenCheckout = () => {
+    dispatch(openCheckout())
+    dispatch(closeCart())
   }
 
   return (
@@ -48,7 +54,7 @@ const Cart = () => {
       <Button
         type="button"
         title="Clique aqui para continuar"
-        onClick={() => dispatch(openCheckout())}
+        onClick={handleOpenCheckout}
       >
         Continuar com a entrega
       </Button>
