@@ -1,49 +1,36 @@
 import { useParams } from 'react-router-dom'
 import Card from '../Cards'
 import * as S from './styles'
-import { useEffect, useState } from 'react'
 import Banner from '../Banner'
 import Modal from '../Modal'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '../../redux/store'
-
-interface Cardapio {
-  foto: string
-  preco: number
-  id: number
-  nome: string
-  descricao: string
-  porcao: string
-}
+import { usePratosQuery } from '../../services/api'
+import { Restaurante } from '../../pages/Home'
 
 const Pratos = () => {
   const { id } = useParams<{ id: string }>()
-  const [cardapio, setCardapio] = useState<Cardapio[]>([])
-  const [loading, setLoading] = useState(true)
   const { isOpenModal, selectedItem } = useSelector(
     (state: RootReducer) => state.cart
   )
 
-  useEffect(() => {
-    setLoading(true)
-    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCardapio(data.cardapio)
-        setLoading(false)
-      })
-  }, [id])
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { data, isLoading, error } = usePratosQuery(id!)
 
-  if (loading) {
+  if (isLoading) {
     return <p>Carregando...</p>
+  }
+
+  if (error) {
+    return <p>Erro ao carregar os dados.</p>
   }
 
   return (
     <>
       <Banner />
       <S.Main className="container">
-        {Array.isArray(cardapio) && cardapio.length > 0 ? (
-          cardapio.map((item) => (
+        {data && Array.isArray(data.cardapio) && data.cardapio.length > 0 ? (
+          data.cardapio.map((item) => (
             <Card
               key={item.id}
               TextoBotao="Adicionar ao carrinho"
