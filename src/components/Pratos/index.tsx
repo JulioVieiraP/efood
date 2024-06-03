@@ -6,6 +6,7 @@ import Modal from '../Modal'
 import { useSelector } from 'react-redux'
 import { RootReducer } from '../../redux/store'
 import { usePratosQuery } from '../../services/api'
+import Loading from '../Loading'
 
 const Pratos = () => {
   const { id } = useParams<{ id: string }>()
@@ -17,7 +18,7 @@ const Pratos = () => {
   const { data, isLoading, error } = usePratosQuery(id!)
 
   if (isLoading) {
-    return <p>Carregando...</p>
+    return <Loading />
   }
 
   if (error) {

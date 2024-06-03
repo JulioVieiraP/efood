@@ -1,10 +1,11 @@
 import { BeatLoader } from 'react-spinners'
 import * as S from './styles'
+import cores from '../../styles/Cores'
 
 const Loading = () => {
   return (
     <S.ContainerLoading>
-      <BeatLoader color="#36d7b7" />
+      <BeatLoader color={cores.RosaAvermelhado} />
     </S.ContainerLoading>
   )
 }

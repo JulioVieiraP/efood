@@ -2,6 +2,7 @@ import ProductCard from '../../components/ListaRestaurantes'
 import Header from '../../components/Header'
 
 import { useRestaurantesQuery } from '../../services/api'
+import Loading from '../../components/Loading'
 
 export interface Cardapio {
   foto: string
@@ -30,7 +31,7 @@ const Home = () => {
   return (
     <>
       <Header Home={true} />
-      {isLoading && <h1>Carregando...</h1>}
+      {isLoading && <Loading />}
       {Restaurantes && <ProductCard Efoods={Restaurantes} />}
     </>
   )
