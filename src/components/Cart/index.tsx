@@ -1,19 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { close, closeCart, remove } from '../../redux/reducers/Cart'
 import { RootReducer } from '../../redux/store'
-import { formataPreco } from '../../pages/Produtos'
 import Button from '../Button'
 import * as S from './styles'
 import lixeira from '../../assets/images/lixeira-de-reciclagem 1.png'
 import { openCheckout } from '../../redux/reducers/Checkout'
+import { getTotalPrice, parseToBrl } from '../../utils'
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch()
   const { items } = useSelector((state: RootReducer) => state.cart)
-
-  const preçoTotal = () => {
-    return items.reduce((acc, item) => acc + item.preco, 0)
-  }
 
   const removeItem = (id: number) => {
     if (items.length > 1) {
@@ -25,8 +21,12 @@ const Cart: React.FC = () => {
   }
 
   const handleOpenCheckout = () => {
-    dispatch(openCheckout())
-    dispatch(closeCart())
+    if (items.length >= 1) {
+      dispatch(openCheckout())
+      dispatch(closeCart())
+    } else {
+      alert('Carrinho vazio')
+    }
   }
 
   return (
@@ -38,7 +38,7 @@ const Cart: React.FC = () => {
               <S.ItemImg src={item.foto} />
               <S.price>
                 <p>Valor total</p>
-                <span>{formataPreco(item.preco)}</span>
+                <span>{parseToBrl(item.preco)}</span>
               </S.price>
               <S.closeBtn src={lixeira} onClick={() => removeItem(item.id)} />
             </S.CartItem>
@@ -49,7 +49,7 @@ const Cart: React.FC = () => {
       )}
       <S.TotalPrice>
         <p>Valor total</p>
-        <span>{formataPreco(preçoTotal())}</span>
+        <span>{parseToBrl(getTotalPrice(items))}</span>
       </S.TotalPrice>
       <Button
         type="button"

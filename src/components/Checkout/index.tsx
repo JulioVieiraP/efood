@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
-import Button from '../Button'
-import * as S from './styles'
 import {
   confimeOrder,
   resetCheckout,
@@ -10,10 +11,12 @@ import {
 } from '../../redux/reducers/Checkout'
 import { RootReducer } from '../../redux/store'
 import { backCart, close, openCart } from '../../redux/reducers/Cart'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { usePedidoMutation } from '../../services/api'
+
+import Button from '../Button'
 import InputMask from 'react-input-mask'
+
+import * as S from './styles'
+import { getTotalPrice, parseToBrl } from '../../utils'
 
 const Checkout = () => {
   const dispatch = useDispatch()
@@ -22,9 +25,9 @@ const Checkout = () => {
     (state: RootReducer) => state.checkout
   )
 
-  const { items } = useSelector((state: RootReducer) => state.cart)
+  const [data, setData] = useState('')
 
-  const [pedido, { data, isLoading, isSuccess }] = usePedidoMutation()
+  const { items } = useSelector((state: RootReducer) => state.cart)
 
   const form = useFormik({
     initialValues: {
@@ -45,20 +48,93 @@ const Checkout = () => {
       endereco: Yup.string().required('Campo obrigatório'),
       city: Yup.string().required('Campo obrigatório'),
       cep: Yup.string().required('Campo obrigatório'),
-      number: Yup.number().required('Campo obrigatório'),
+      number: Yup.number()
+        .required('Campo obrigatório')
+        .typeError('Deve ser um número'),
 
-      cardName: Yup.string().required('Campo obrigatório'),
-      cardNumber: Yup.string()
-        .min(16, 'O número do cartão deve ter pelo menos 16 dígitos')
-        .required('Campo obrigatório'),
-      cvv: Yup.string()
-        .min(3, 'O CVV deve ter pelo menos 3 dígitos')
-        .required('Campo obrigatório'),
-      expirationMonth: Yup.string().required('Campo obrigatório'),
-      expirationYear: Yup.string().required('Campo obrigatório')
+      cardName: Yup.string().when((values, schema) =>
+        isPayment ? schema.required('O campo é obrigatório') : schema
+      ),
+      cardNumber: Yup.string().when((values, schema) =>
+        isPayment ? schema.required('O campo é obrigatório') : schema
+      ),
+      cvv: Yup.string().when((values, schema) =>
+        isPayment ? schema.required('O campo é obrigatório') : schema
+      ),
+      mesVencimento: Yup.string().when((values, schema) =>
+        isPayment ? schema.required('O campo é obrigatório') : schema
+      ),
+      anoVencimento: Yup.string().when((values, schema) =>
+        isPayment ? schema.required('O campo é obrigatório') : schema
+      )
     }),
-    onSubmit: (values) => {}
+    onSubmit: (values) => {
+      console.log(values)
+    }
   })
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (
+      form.values.cardName &&
+      form.values.cardNumber.length >= 19 &&
+      form.values.cvv.length >= 3 &&
+      form.values.expirationMonth.length >= 2 &&
+      form.values.expirationYear.length >= 2
+    ) {
+      dispatch(confimeOrder())
+
+      try {
+        const response = await fetch(
+          'https://fake-api-tau.vercel.app/api/efood/checkout',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              delivery: {
+                receiver: form.values.name,
+                address: {
+                  description: form.values.endereco,
+                  city: form.values.city,
+                  zipCode: form.values.cep,
+                  number: form.values.number,
+                  complement: form.values.complement
+                }
+              },
+              payment: {
+                card: {
+                  name: form.values.cardName,
+                  number: form.values.cardNumber.replace(/\s/g, ''),
+                  code: parseInt(form.values.cvv),
+                  expires: {
+                    month: parseInt(form.values.expirationMonth),
+                    year: parseInt(form.values.expirationYear)
+                  }
+                }
+              },
+              products: items.map((item) => ({
+                id: item.id,
+                price: parseFloat(String(item.preco))
+              }))
+            })
+          }
+        )
+
+        if (!response.ok) {
+          throw new Error('Erro ao processar o pedido')
+        }
+
+        const data = await response.json()
+        setData(data.orderId)
+      } catch (error) {
+        console.error('Erro ao enviar pedido:', error)
+      }
+    } else {
+      alert('Preencha todos os campos')
+    }
+  }
 
   const handlePayment = () => {
     if (
@@ -69,21 +145,6 @@ const Checkout = () => {
       form.values.number.length >= 11
     ) {
       dispatch(setPayment())
-    } else {
-      alert('Preencha todos os campos')
-    }
-  }
-
-  const handleConfirmed = () => {
-    if (
-      form.values.cardName &&
-      form.values.cardNumber &&
-      form.values.cvv &&
-      form.values.expirationMonth &&
-      form.values.expirationYear
-    ) {
-      dispatch(confimeOrder())
-      form.handleSubmit()
     } else {
       alert('Preencha todos os campos')
     }
@@ -102,7 +163,7 @@ const Checkout = () => {
 
   return (
     <S.Checkout>
-      <form onSubmit={form.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <S.DeliveryContainer className={isDelivery ? 'show' : ''}>
           <h3>Entrega</h3>
           <S.InputGroup>
@@ -191,7 +252,7 @@ const Checkout = () => {
         </S.DeliveryContainer>
 
         <S.PaymentContainer className={isPayment ? 'show' : ''}>
-          <h3>Pagamento - Valor a pagar R$ 190,90</h3>
+          <h3>Pagamento - Valor a pagar {parseToBrl(getTotalPrice(items))}</h3>
           <S.InputGroup>
             <label htmlFor="cardName">Nome no cartão</label>
             <input
@@ -254,11 +315,7 @@ const Checkout = () => {
           </S.RowInput>
 
           <S.ButtonGroup>
-            <Button
-              type="submit"
-              title="Clique aqui para finalizar a compra"
-              onClick={handleConfirmed}
-            >
+            <Button type="submit" title="Clique aqui para finalizar a compra">
               Finalizar pagamento
             </Button>
             <Button
@@ -271,33 +328,30 @@ const Checkout = () => {
           </S.ButtonGroup>
         </S.PaymentContainer>
       </form>
-      {orderPlaced && (
-        <>
-          <S.confimeOrder>
-            <h3>Pedido realizado - ORDER_ID</h3>
-            <div>
-              <p>
-                Estamos felizes em informar que seu pedido já está em processo
-                de preparação e, em breve, será entregue no endereço fornecido.{' '}
-                <br /> <br /> Gostaríamos de ressaltar que nossos entregadores
-                não estão autorizados a realizar cobranças extras. <br /> <br />
-                Lembre-se da importância de higienizar as mãos após o
-                recebimento do pedido, garantindo assim sua segurança e
-                bem-estar durante a refeição. <br /> <br />
-                Esperamos que desfrute de uma deliciosa e agradável experiência
-                gastronômica. Bom apetite!
-              </p>
-            </div>
-            <Button
-              type="button"
-              title="clique aqui para concluir a compra"
-              onClick={handleCloseAll}
-            >
-              Concluir
-            </Button>
-          </S.confimeOrder>
-        </>
-      )}
+
+      <S.confimeOrder className={orderPlaced ? 'show' : ''}>
+        <h3>Pedido realizado - {data}</h3>
+        <div>
+          <p>
+            Estamos felizes em informar que seu pedido já está em processo de
+            preparação e, em breve, será entregue no endereço fornecido. <br />{' '}
+            <br /> Gostaríamos de ressaltar que nossos entregadores não estão
+            autorizados a realizar cobranças extras. <br /> <br />
+            Lembre-se da importância de higienizar as mãos após o recebimento do
+            pedido, garantindo assim sua segurança e bem-estar durante a
+            refeição. <br /> <br />
+            Esperamos que desfrute de uma deliciosa e agradável experiência
+            gastronômica. Bom apetite!
+          </p>
+        </div>
+        <Button
+          type="button"
+          title="clique aqui para concluir a compra"
+          onClick={handleCloseAll}
+        >
+          Concluir
+        </Button>
+      </S.confimeOrder>
     </S.Checkout>
   )
 }

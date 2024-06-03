@@ -1,4 +1,3 @@
-import { formataPreco } from '../../pages/Produtos'
 import Button from '../Button'
 import * as S from './styles'
 import fecharIcon from '../../assets/images/close 1.png'
@@ -6,6 +5,7 @@ import { MouseEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import { add, closeModal, open } from '../../redux/reducers/Cart'
 import { Cardapio } from '../../pages/Home'
+import { parseToBrl } from '../../utils'
 
 export type Props = {
   id?: number
@@ -57,7 +57,7 @@ const Modal = ({ id, foto, nome, descricao, preco, porcao }: Props) => {
                 title="Adicione ao carrinho"
                 onClick={addItem}
               >
-                <>Adicionar ao carrinho - {formataPreco(preco)}</>
+                <>Adicionar ao carrinho - {parseToBrl(preco)}</>
               </Button>
             )}
           </S.Content>

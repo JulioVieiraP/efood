@@ -64,6 +64,7 @@ export const PaymentContainer = styled.div`
 `
 
 export const confimeOrder = styled.div`
+  display: none;
   p {
     font-weight: 400px;
     font-size: 14px;
@@ -72,5 +73,9 @@ export const confimeOrder = styled.div`
 
   ${ButtonContainer} {
     margin-top: 24px;
+  }
+
+  &.show {
+    display: block;
   }
 `
