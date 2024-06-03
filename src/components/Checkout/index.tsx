@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
   confimeOrder,
@@ -14,9 +15,9 @@ import { backCart, close, openCart } from '../../redux/reducers/Cart'
 
 import Button from '../Button'
 import InputMask from 'react-input-mask'
+import { getTotalPrice, parseToBrl } from '../../utils'
 
 import * as S from './styles'
-import { getTotalPrice, parseToBrl } from '../../utils'
 
 const Checkout = () => {
   const dispatch = useDispatch()
@@ -26,11 +27,44 @@ const Checkout = () => {
   )
 
   const [data, setData] = useState('')
+  const [deliveryFieldsValid, setDeliveryFieldsValid] = useState(false)
 
   const { items } = useSelector((state: RootReducer) => state.cart)
 
-  const form = useFormik({
-    initialValues: {
+  const schema = z.object({
+    name: z.string().min(3, { message: 'Nome é obrigatório' }),
+    endereco: z.string().min(5, { message: 'Endereço é obrigatório' }),
+    city: z.string().min(3, { message: 'Cidade é obrigatória' }),
+    cep: z.string().min(8, { message: 'CEP é obrigatório' }),
+    number: z.string().min(11, { message: 'Número é obrigatório' }),
+    complement: z.string().optional(),
+
+    cardName: z.string().min(3, { message: 'Campo obrigatório' }).optional(),
+    cardNumber: z
+      .string()
+      .min(19, { message: 'Deve ter 19 dígitos' })
+      .optional(),
+    cvv: z.string().min(3, { message: 'Campo obrigatório' }).optional(),
+    expirationMonth: z
+      .string()
+      .min(2, { message: 'Campo obrigatório' })
+      .optional(),
+    expirationYear: z
+      .string()
+      .min(2, { message: 'Campo obrigatório' })
+      .optional()
+  })
+
+  type formDataType = z.infer<typeof schema>
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    trigger
+  } = useForm<formDataType>({
+    resolver: zodResolver(schema),
+    defaultValues: {
       name: '',
       endereco: '',
       city: '',
@@ -42,45 +76,17 @@ const Checkout = () => {
       cvv: '',
       expirationMonth: '',
       expirationYear: ''
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required('Campo obrigatório'),
-      endereco: Yup.string().required('Campo obrigatório'),
-      city: Yup.string().required('Campo obrigatório'),
-      cep: Yup.string().required('Campo obrigatório'),
-      number: Yup.number()
-        .required('Campo obrigatório')
-        .typeError('Deve ser um número'),
-
-      cardName: Yup.string().when((values, schema) =>
-        isPayment ? schema.required('O campo é obrigatório') : schema
-      ),
-      cardNumber: Yup.string().when((values, schema) =>
-        isPayment ? schema.required('O campo é obrigatório') : schema
-      ),
-      cvv: Yup.string().when((values, schema) =>
-        isPayment ? schema.required('O campo é obrigatório') : schema
-      ),
-      mesVencimento: Yup.string().when((values, schema) =>
-        isPayment ? schema.required('O campo é obrigatório') : schema
-      ),
-      anoVencimento: Yup.string().when((values, schema) =>
-        isPayment ? schema.required('O campo é obrigatório') : schema
-      )
-    }),
-    onSubmit: (values) => {
-      console.log(values)
     }
   })
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const onSubmit = async (formData: formDataType) => {
     if (
-      form.values.cardName &&
-      form.values.cardNumber.length >= 19 &&
-      form.values.cvv.length >= 3 &&
-      form.values.expirationMonth.length >= 2 &&
-      form.values.expirationYear.length >= 2
+      formData.cardName &&
+      formData.cardNumber &&
+      formData.cvv &&
+      formData.expirationMonth &&
+      formData.expirationYear &&
+      deliveryFieldsValid
     ) {
       dispatch(confimeOrder())
 
@@ -94,23 +100,23 @@ const Checkout = () => {
             },
             body: JSON.stringify({
               delivery: {
-                receiver: form.values.name,
+                receiver: formData.name,
                 address: {
-                  description: form.values.endereco,
-                  city: form.values.city,
-                  zipCode: form.values.cep,
-                  number: form.values.number,
-                  complement: form.values.complement
+                  description: formData.endereco,
+                  city: formData.city,
+                  zipCode: formData.cep,
+                  number: formData.number,
+                  complement: formData.complement
                 }
               },
               payment: {
                 card: {
-                  name: form.values.cardName,
-                  number: form.values.cardNumber.replace(/\s/g, ''),
-                  code: parseInt(form.values.cvv),
+                  name: formData.cardName,
+                  number: formData.cardNumber.replace(/\s/g, ''),
+                  code: parseInt(formData.cvv),
                   expires: {
-                    month: parseInt(form.values.expirationMonth),
-                    year: parseInt(form.values.expirationYear)
+                    month: parseInt(formData.expirationMonth),
+                    year: parseInt(formData.expirationYear)
                   }
                 }
               },
@@ -136,18 +142,11 @@ const Checkout = () => {
     }
   }
 
-  const handlePayment = () => {
-    if (
-      form.values.name &&
-      form.values.endereco &&
-      form.values.city &&
-      form.values.cep.length >= 9 &&
-      form.values.number.length >= 11
-    ) {
-      dispatch(setPayment())
-    } else {
-      alert('Preencha todos os campos')
-    }
+  type FieldName = keyof formDataType
+
+  const handleDeliveryFieldChange = async (fieldName: FieldName) => {
+    const isFieldValid = await trigger(fieldName)
+    setDeliveryFieldsValid(isFieldValid)
   }
 
   const handleCloseAll = () => {
@@ -163,38 +162,35 @@ const Checkout = () => {
 
   return (
     <S.Checkout>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <S.DeliveryContainer className={isDelivery ? 'show' : ''}>
           <h3>Entrega</h3>
           <S.InputGroup>
             <label htmlFor="name">Quem irá receber</label>
             <input
               type="text"
-              id="name"
-              value={form.values.name}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
+              {...register('name')}
+              onBlur={() => handleDeliveryFieldChange('name')}
             />
+            {errors.name && <span>{errors.name.message}</span>}
           </S.InputGroup>
           <S.InputGroup>
             <label htmlFor="endereco">Endereço</label>
             <input
               type="text"
-              id="endereco"
-              value={form.values.endereco}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
+              {...register('endereco')}
+              onBlur={() => handleDeliveryFieldChange('endereco')}
             />
+            {errors.endereco && <span>{errors.endereco.message}</span>}
           </S.InputGroup>
           <S.InputGroup>
             <label htmlFor="city">Cidade</label>
             <input
               type="text"
-              id="city"
-              value={form.values.city}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
+              {...register('city')}
+              onBlur={() => handleDeliveryFieldChange('city')}
             />
+            {errors.city && <span>{errors.city.message}</span>}
           </S.InputGroup>
 
           <S.RowInput>
@@ -202,42 +198,36 @@ const Checkout = () => {
               <label htmlFor="cep">CEP</label>
               <InputMask
                 type="text"
-                id="cep"
-                value={form.values.cep}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+                {...register('cep')}
+                onBlur={() => handleDeliveryFieldChange('cep')}
                 mask="99999-999"
               />
+              {errors.cep && <span>{errors.cep.message}</span>}
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="number">Número</label>
               <InputMask
                 type="text"
-                id="number"
-                value={form.values.number}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
-                mask="(99) 99999-9999"
+                {...register('number')}
+                onBlur={() => handleDeliveryFieldChange('number')}
+                mask="(99) 9999-9999"
               />
+              {errors.number && <span>{errors.number.message}</span>}
             </S.InputGroup>
           </S.RowInput>
 
           <S.InputGroup>
             <label htmlFor="complement">Complemento (opcional)</label>
-            <input
-              type="text"
-              id="complement"
-              value={form.values.complement}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-            />
+            <input type="text" id="complement" {...register('complement')} />
+            {errors.complement && <span>{errors.complement.message}</span>}
           </S.InputGroup>
 
           <S.ButtonGroup>
             <Button
               type="button"
               title="Clique aqui para continuar com o pagamento"
-              onClick={handlePayment}
+              onClick={() => dispatch(setPayment())}
+              disabled={!deliveryFieldsValid}
             >
               Continuar com pagamento
             </Button>
@@ -258,10 +248,10 @@ const Checkout = () => {
             <input
               type="text"
               id="cardName"
-              value={form.values.cardName}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
+              {...register('cardName')}
+              onBlur={() => trigger('cardName')}
             />
+            {errors.cardName && <span>{errors.cardName.message}</span>}
           </S.InputGroup>
 
           <S.RowInput>
@@ -270,22 +260,22 @@ const Checkout = () => {
               <InputMask
                 type="text"
                 id="cardNumber"
-                value={form.values.cardNumber}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+                {...register('cardNumber')}
+                onBlur={() => trigger('cardNumber')}
                 mask="9999 9999 9999 9999"
               />
+              {errors.cardNumber && <span>{errors.cardNumber?.message}</span>}
             </S.InputGroup>
             <S.InputGroup width="87px">
               <label htmlFor="cvv">CVV</label>
               <InputMask
                 type="text"
                 id="cvv"
-                value={form.values.cvv}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+                {...register('cvv')}
+                onBlur={() => trigger('cvv')}
                 mask="999"
               />
+              {errors.cvv && <span>{errors.cvv?.message}</span>}
             </S.InputGroup>
           </S.RowInput>
 
@@ -295,22 +285,26 @@ const Checkout = () => {
               <InputMask
                 type="text"
                 id="expirationMonth"
-                value={form.values.expirationMonth}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+                {...register('expirationMonth')}
+                onBlur={() => trigger('expirationMonth')}
                 mask="99"
               />
+              {errors.expirationMonth && (
+                <span>{errors.expirationMonth.message}</span>
+              )}
             </S.InputGroup>
             <S.InputGroup>
               <label htmlFor="expirationYear">Ano de vencimento</label>
               <InputMask
                 type="text"
                 id="expirationYear"
-                value={form.values.expirationYear}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+                {...register('expirationYear')}
+                onBlur={() => trigger('expirationYear')}
                 mask="99"
               />
+              {errors.expirationYear && (
+                <span>{errors.expirationYear.message}</span>
+              )}
             </S.InputGroup>
           </S.RowInput>
 

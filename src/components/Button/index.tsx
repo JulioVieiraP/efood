@@ -6,12 +6,18 @@ type Props = {
   to?: string
   onClick?: () => void
   children: JSX.Element | string
+  disabled?: boolean
 }
 
-const Button = ({ type, children, title, to, onClick }: Props) => {
+const Button = ({ type, children, title, to, onClick, disabled }: Props) => {
   if (type === 'button') {
     return (
-      <S.ButtonContainer type="button" title={title} onClick={onClick}>
+      <S.ButtonContainer
+        type="button"
+        title={title}
+        onClick={onClick}
+        disabled={disabled}
+      >
         {children}
       </S.ButtonContainer>
     )

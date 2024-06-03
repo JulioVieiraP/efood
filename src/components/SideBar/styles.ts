@@ -32,6 +32,7 @@ export const SideBarContent = styled.aside`
   padding: 0 8px;
   z-index: 3;
   position: relative;
+  border: none;
 
   ${ButtonContainer} {
     width: 100%;

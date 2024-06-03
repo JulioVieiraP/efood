@@ -39,6 +39,10 @@ export const InputGroup = styled.div<Props>`
     border: none;
     background-color: ${cores.Pêssego};
   }
+
+  span {
+    max-width: 87px;
+  }
 `
 
 export const ButtonGroup = styled.div`
