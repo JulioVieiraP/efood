@@ -50,6 +50,9 @@ const Cart = createSlice({
     },
     closeCart: (state) => {
       state.isCart = false
+    },
+    backCart: (state) => {
+      state.isCart = initialState.isCart
     }
   }
 })
@@ -62,7 +65,8 @@ export const {
   openModal,
   closeModal,
   openCart,
-  closeCart
+  closeCart,
+  backCart
 } = Cart.actions
 
 export default Cart.reducer

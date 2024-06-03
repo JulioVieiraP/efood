@@ -31,14 +31,14 @@ export const InputGroup = styled.div<Props>`
     font-weight: 700;
     line-height: 16px;
   }
-`
 
-export const Input = styled.input<Props>`
-  width: ${(props) => (props.width ? `${props.width}` : '100%')};
-  height: 32px;
-  margin-top: 8px;
-  border: none;
-  background-color: ${cores.Pêssego};
+  input {
+    width: ${(props) => (props.width ? `${props.width}` : '100%')};
+    height: 32px;
+    margin-top: 8px;
+    border: none;
+    background-color: ${cores.Pêssego};
+  }
 `
 
 export const ButtonGroup = styled.div`

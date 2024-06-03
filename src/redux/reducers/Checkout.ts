@@ -26,6 +26,10 @@ const checkoutSlice = createSlice({
       state.isDelivery = false
       state.isPayment = true
     },
+    setDelivery: (state) => {
+      state.isDelivery = true
+      state.isPayment = false
+    },
     confimeOrder: (state) => {
       state.isDelivery = false
       state.isPayment = false
@@ -39,7 +43,12 @@ const checkoutSlice = createSlice({
   }
 })
 
-export const { openCheckout, setPayment, confimeOrder, resetCheckout } =
-  checkoutSlice.actions
+export const {
+  openCheckout,
+  setPayment,
+  setDelivery,
+  confimeOrder,
+  resetCheckout
+} = checkoutSlice.actions
 
 export default checkoutSlice.reducer
